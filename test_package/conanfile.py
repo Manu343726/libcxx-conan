@@ -20,14 +20,9 @@ class DefaultNameConan(ConanFile):
     generators = "cmake"
 
     def build(self):
-        cmake = CMake(self.settings)
-        self.run('cmake . %s' % cmake.command_line)
-        self.run("cmake --build . %s" % cmake.build_config)
+        cmake = CMake(self)
+        cmake.configure()
+        cmake.build()
 
-    def imports(self):
-        self.copy(pattern="*.dll", dst="bin", src="bin")
-        self.copy(pattern="*.dylib", dst="bin", src="lib")
-        self.copy(pattern="clang", dst="bin", src="bin")
-        
     def test(self):
         pass
