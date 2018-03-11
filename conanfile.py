@@ -1,6 +1,6 @@
 from contextlib import contextmanager
 from conans import ConanFile, CMake
-from conans.tools import download, unzip
+from conans.tools import download, unzip, patch
 import shutil
 import os
 import platform
@@ -64,6 +64,9 @@ class ClangConan(ConanFile):
     def source(self):
         download_extract_llvm_component("libcxx", ClangConan.version,
                                         "libcxx")
+
+        download("https://github.com/llvm-mirror/libcxx/commit/6e02e89f65ca1ca1d6ce30fbc557563164dd327e.patch", "missing_glibc_xlocale.patch")
+        patch(base_path="libcxx", patch_file="missing_glibc_xlocale.patch")
 
     def build(self):
         cmake = CMake(self)
